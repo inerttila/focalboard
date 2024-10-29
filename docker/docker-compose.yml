@@ -4,6 +4,7 @@ services:
     build:
       context: ../
       dockerfile: docker/Dockerfile
+    image: inert/inventar:new
     container_name: focalboard
     volumes:
       - fbdata:/opt/focalboard/data
