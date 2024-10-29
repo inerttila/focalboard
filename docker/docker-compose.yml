@@ -10,7 +10,7 @@ services:
     ports:
       - 80:8000
     environment:
-      - VIRTUAL_HOST=focalboard.local
+      - TARGETOS=linux
       - VIRTUAL_PORT=8000
 
 volumes:
