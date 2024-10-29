@@ -1,28 +1,25 @@
 ### Webapp build
-FROM node:18 as nodebuild 
+FROM node:18 AS nodebuild 
 
 WORKDIR /webapp
 ADD webapp/ /webapp
 
-### 'CPPFLAGS="-DPNG_ARM_NEON_OPT=0"' Needed To Avoid Bug Described in: https://github.com/imagemin/optipng-bin/issues/118#issuecomment-1019838562
-### Can be Removed when Ticket will be Closed
 RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm run pack
 
 ### Go build
-FROM golang:1.21 as gobuild  
+FROM golang:1.21 AS gobuild  
 
 WORKDIR /go/src/focalboard
 ADD . /go/src/focalboard
 
-# Get target architecture 
 ARG TARGETOS
 ARG TARGETARCH  
 
 RUN EXCLUDE_PLUGIN=true EXCLUDE_SERVER=true EXCLUDE_ENTERPRISE=true make server-docker os=${TARGETOS} arch=${TARGETARCH}
 
 ## Final image
-FROM debian:buster-slim
+FROM debian:bullseye-slim  
 
 RUN mkdir -p /opt/focalboard/data/files
 RUN chown -R nobody:nogroup /opt/focalboard

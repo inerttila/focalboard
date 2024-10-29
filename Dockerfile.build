@@ -7,7 +7,7 @@
 # Afterwards the packages can be found in the ./out folder.
 
 # build frontend
-FROM node:18 as nodebuild
+FROM node:18 AS nodebuild
 
 WORKDIR /webapp
 COPY webapp .
@@ -18,7 +18,7 @@ RUN CPPFLAGS="-DPNG_ARM_NEON_OPT=0" npm install --no-optional && \
     npm run pack
 
 # build backend and package
-FROM golang:1.21 as gobuild  
+FROM golang:1.21 AS gobuild  
 
 COPY . .
 COPY --from=frontend /webapp/pack webapp/pack
